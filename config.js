@@ -11,9 +11,9 @@
 
 const SOURCES = [
   // ── 데모용: 같은 폴더의 CSV 파일 (인터넷 게시 전에도 확인 가능) ──
-  { name: "물리학실험실1",   url: "sample-data/물리학실험실1.csv" },
-  { name: "물리학R&E실",     url: "sample-data/물리학R&E실.csv" },
-  { name: "화학시약실",       url: "sample-data/화학시약실.csv" },
+  { name: "물리학실험실1",   url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwYv6VSQ5BHEs5ABvlFJCGm7W9FiWfohCniPSCu85rbnKg06iT2X3LIa53qMMZk0jYL8aQA7FID8wC/pub?gid=123017136&single=true&output=csv" },
+  { name: "물리학R&E실",     url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwYv6VSQ5BHEs5ABvlFJCGm7W9FiWfohCniPSCu85rbnKg06iT2X3LIa53qMMZk0jYL8aQA7FID8wC/pub?gid=1367808534&single=true&output=csv" },
+  { name: "화학시약실",       url: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTwYv6VSQ5BHEs5ABvlFJCGm7W9FiWfohCniPSCu85rbnKg06iT2X3LIa53qMMZk0jYL8aQA7FID8wC/pub?gid=1524000102&single=true&output=csv" },
 
   // ── 실제 운영: 구글시트 CSV 게시 링크로 교체/추가 ──
   // { name: "물리특별실험실", url: "https://docs.google.com/spreadsheets/d/e/XXXX/pub?gid=0&single=true&output=csv" },
