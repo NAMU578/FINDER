@@ -10,6 +10,7 @@ const csv = (gid) => `${PUB_BASE}?gid=${gid}&single=true&output=csv`;
 const SOURCES = [
   // ── 물리 ──
   { name: "물리학실험실1",     url: csv("123017136") },
+  { name: "물리학실험실1,2 사이",     url: csv("2017488138") },
   { name: "물리학실험실2",     url: csv("1168434556") },
   { name: "물리R&E실",         url: csv("1367808534") },
   { name: "물리첨단기기실",    url: csv("166168828") },
