@@ -17,6 +17,7 @@
     --tag:#f1f1f1;
     --focus:#111111;
   }
+
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
@@ -27,6 +28,7 @@
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
   }
+
   .wrap{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
 
   header.top{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:24px;}
@@ -71,11 +73,26 @@
   .filters select:focus{outline:0;border-color:var(--focus);}
 
   .status{
-    display:flex;justify-content:space-between;align-items:baseline;
+    display:flex;justify-content:space-between;align-items:flex-start;
     margin:22px 0 12px;color:var(--muted);font-size:13px;
+    gap:16px;
   }
+  .status .count{padding-top:6px;}
   .status .count strong{color:var(--ink);font-weight:600;}
-  .status .updated{color:var(--faint);}
+  .status-right{
+    display:flex;flex-direction:column;align-items:flex-end;gap:5px;
+    flex:0 0 auto;
+  }
+  .limit-select{
+    appearance:none;
+    border:1px solid var(--line);border-radius:8px;
+    padding:7px 30px 7px 12px;font-size:13px;background:var(--paper);
+    color:var(--ink);cursor:pointer;font-family:inherit;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6b6b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 10px center;
+  }
+  .limit-select:focus{outline:0;border-color:var(--focus);}
+  .status .updated{color:var(--faint);font-size:12px;}
 
   table{width:100%;border-collapse:collapse;font-size:14px;}
   thead th{
@@ -123,6 +140,16 @@
       color:var(--faint);font-size:12px;
     }
     td.namecell[data-label]::before{display:none;}
+
+    .status{
+      align-items:flex-start;
+    }
+    .status-right{
+      align-items:flex-end;
+    }
+    .limit-select{
+      max-width:100%;
+    }
   }
 </style>
 </head>
@@ -155,7 +182,15 @@
 
   <div class="status">
     <span class="count"><strong id="matchN">0</strong>건 / 전체 <span id="totalN">0</span>건</span>
-    <span class="updated" id="updated"></span>
+    <span class="status-right">
+      <select id="limit" class="limit-select" title="표시할 결과 수">
+        <option value="30" selected>상위 30건</option>
+        <option value="50">상위 50건</option>
+        <option value="100">상위 100건</option>
+        <option value="500">상위 500건</option>
+      </select>
+      <span class="updated" id="updated"></span>
+    </span>
   </div>
 
   <div id="out"><div class="loading">데이터를 불러오는 중…</div></div>
@@ -165,13 +200,11 @@
   </footer>
 </div>
 
-<!-- 설정: config.js 가 있으면 그것을 쓰고, 없으면 아래 기본값 사용 -->
 <script src="config.js" onerror="void 0"></script>
 <script>
 (function(){
   "use strict";
 
-  // config.js 가 로드되지 않았을 때를 대비한 내장 기본 설정
   var sources = (typeof SOURCES !== "undefined") ? SOURCES : [
     { name:"화학시약실",     url:"https://docs.google.com/spreadsheets/d/e/2PACX-1vTwYv6VSQ5BHEs5ABvlFJCGm7W9FiWfohCniPSCu85rbnKg06iT2X3LIa53qMMZk0jYL8aQA7FID8wC/pub?gid=1524000102&single=true&output=csv" }
   ];
@@ -181,6 +214,7 @@
     clear: document.getElementById("clear"),
     place: document.getElementById("place"),
     cat: document.getElementById("cat"),
+    limit: document.getElementById("limit"),
     out: document.getElementById("out"),
     matchN: document.getElementById("matchN"),
     totalN: document.getElementById("totalN"),
@@ -190,7 +224,6 @@
 
   var rows = [];
 
-  // ---------- CSV 파서 (따옴표·줄바꿈 처리) ----------
   function parseCSV(text){
     text = text.replace(/^\uFEFF/, "");
     var out=[], row=[], field="", i=0, inq=false, c;
@@ -218,6 +251,7 @@
     var header = matrix[0].map(function(h){ return String(h||"").trim(); });
     var idx = {};
     header.forEach(function(h,k){ if(h) idx[h]=k; });
+
     function g(r,names){
       for(var j=0;j<names.length;j++){
         if(idx[names[j]] !== undefined){
@@ -227,6 +261,7 @@
       }
       return "";
     }
+
     var list=[];
     for(var i=1;i<matrix.length;i++){
       var r = matrix[i];
@@ -262,14 +297,12 @@
   function highlight(text, q){
     var t = esc(text);
     if(!q) return t;
-    // 공백 무시 매칭이라 정확 하이라이트는 어려워 원문 부분일치만 강조
     try{
       var re = new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig");
       return t.replace(re,"<mark>$1</mark>");
     }catch(e){ return t; }
   }
 
-  // ---------- 로드 ----------
   function load(){
     var demo = sources.some(function(s){ return !/^https?:\/\//.test(s.url); });
     els.banner.style.display = demo ? "block" : "none";
@@ -303,12 +336,12 @@
       });
   }
 
-  // ---------- 검색 ----------
   function render(){
     var raw = els.q.value.trim();
     var q = norm(raw);
     var place = els.place.value;
     var cat = els.cat.value;
+    var limit = parseInt(els.limit.value, 10) || 30;
 
     var list = rows.filter(function(r){
       if(place && r.place !== place) return false;
@@ -329,7 +362,7 @@
       '<th>품목</th><th>수량</th><th>위치</th><th>장소</th><th>분류</th>'+
       '</tr></thead><tbody>';
 
-    list.slice(0,500).forEach(function(r){
+    list.slice(0,limit).forEach(function(r){
       var second = [r.formula, r.cas].filter(Boolean).join(" · ");
       html += '<tr>'+
         '<td class="namecell" data-label="품목">'+
@@ -344,20 +377,23 @@
         '<td data-label="분류"><span class="tag">'+esc(r.cat||"-")+'</span></td>'+
       '</tr>';
     });
+
     html += '</tbody></table>';
-    if(list.length>500){
-      html += '<div class="empty" style="padding:20px;">상위 500건만 표시합니다. 검색어를 좁혀 주세요.</div>';
+    if(list.length > limit){
+      html += '<div class="empty" style="padding:20px;">상위 ' +
+        limit.toLocaleString("ko-KR") +
+        '건만 표시합니다. 검색어를 좁혀 주세요.</div>';
     }
     els.out.innerHTML = html;
   }
 
-  // ---------- 이벤트 ----------
   var timer;
   els.q.addEventListener("input", function(){
     clearTimeout(timer); timer=setTimeout(render,120);
   });
   els.place.addEventListener("change", render);
   els.cat.addEventListener("change", render);
+  els.limit.addEventListener("change", render);
   els.clear.addEventListener("click", function(){
     els.q.value=""; els.q.focus(); render();
   });
