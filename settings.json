@@ -1,10 +1,227 @@
 {
   "version": 1,
-  "savedAt": "",
+  "savedAt": "2026-08-27 11:34",
   "banner": {
     "show": false,
     "text": ""
   },
-  "places": {},
+  "places": {
+    "물리학실험실1": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "물리학실험실1,2 사이": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "물리학실험실2": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "물리R&E실": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "물리첨단기기실": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "물리특별실험실": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "화학실험실1": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "화학실험실2": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "화학R&E실": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "화학첨단기기실1": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "화학첨단기기실2": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "화학시약실": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "생명과학실험실": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "식물배양실": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "현미경실": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "생명과학R&E실": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "분자생물학실": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "생물교사실": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "생명시약실": {
+      "visible": false,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "지구과학실험실1": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "지구과학실험실2": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "지구과학R&E실": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "지구과학첨단기기실": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    },
+    "지구과학특별실험실": {
+      "visible": true,
+      "cats": [
+        "시약",
+        "비품",
+        "소모품"
+      ],
+      "updated": ""
+    }
+  },
   "patchNotes": []
 }
