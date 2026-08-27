@@ -61,7 +61,7 @@ const CATEGORIES = ["시약", "비품", "소모품"];
    ============================================================ */
 const ADMIN_REPO = {
   owner:  "NAMU578",   // 예: youngkildong
-  repo:   "finder_admin",     // 예: lab-search
+  repo:   "FINDER",     // 예: lab-search
   branch: "main",               // GitHub 기본 브랜치 (또는 "master")
   path:   "settings.json"
 };
