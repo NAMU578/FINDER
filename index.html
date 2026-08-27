@@ -1,67 +1,44 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>비품·시료 통합 검색</title>
 <style>
   :root{
-    --bg:#ffffff;
-    --paper:#ffffff;
-    --ink:#1a1a1a;
-    --muted:#6b6b6b;
-    --faint:#8f8f8f;
-    --line:#e2e2e2;
-    --line-strong:#cfcfcf;
-    --hover:#f6f6f6;
-    --tag:#f1f1f1;
-    --focus:#111111;
+    --ink:#1a1a1a; --muted:#4a4a4a; --faint:#8a8a8a;
+    --line:#e5e5e5; --line-strong:#c9c9c9;
+    --paper:#fff; --hover:#fafafa; --tag:#f2f2f2; --focus:#9a9a9a;
   }
-
   *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
   body{
-    background:var(--bg);
-    color:var(--ink);
-    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif;
-    font-size:15px;
-    line-height:1.6;
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo",
+                "Malgun Gothic",sans-serif;
     -webkit-font-smoothing:antialiased;
   }
+  .wrap{max-width:1000px;margin:0 auto;padding:44px 24px 80px;}
 
-  .wrap{max-width:960px;margin:0 auto;padding:40px 20px 80px;}
-
-  header.top{border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:24px;}
-  header.top h1{
-    font-size:20px;font-weight:700;margin:0 0 4px;letter-spacing:-0.01em;
-  }
-  header.top p{margin:0;color:var(--muted);font-size:13.5px;}
+  header.top h1{font-size:22px;font-weight:600;margin:0 0 6px;}
+  header.top p{margin:0;color:var(--faint);font-size:13.5px;}
 
   .searchbar{
-    display:flex;align-items:center;gap:10px;
-    border:1px solid var(--line-strong);
-    border-radius:10px;
-    padding:2px 14px;
-    background:var(--paper);
-    transition:border-color .15s ease;
+    display:flex;align-items:center;gap:8px;margin-top:24px;
+    border:1px solid var(--line-strong);border-radius:10px;padding:10px 12px;
+    color:var(--faint);
   }
   .searchbar:focus-within{border-color:var(--focus);}
-  .searchbar svg{flex:0 0 auto;color:var(--faint);}
-  #q{
-    flex:1;border:0;outline:0;background:transparent;
-    font-size:16px;padding:14px 0;color:var(--ink);
-    font-family:inherit;
+  .searchbar input{
+    flex:1;border:0;outline:0;font-size:15px;font-family:inherit;
+    color:var(--ink);background:transparent;
   }
-  #q::placeholder{color:var(--faint);}
   #clear{
-    border:0;background:transparent;color:var(--faint);cursor:pointer;
+    background:none;border:0;cursor:pointer;color:var(--faint);
     font-size:18px;line-height:1;padding:6px;display:none;
   }
   #clear:hover{color:var(--ink);}
 
-  .filters{
-    display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center;
-  }
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center;}
   .filters select{
     appearance:none;
     border:1px solid var(--line);border-radius:8px;
@@ -73,26 +50,11 @@
   .filters select:focus{outline:0;border-color:var(--focus);}
 
   .status{
-    display:flex;justify-content:space-between;align-items:flex-start;
+    display:flex;justify-content:space-between;align-items:baseline;
     margin:22px 0 12px;color:var(--muted);font-size:13px;
-    gap:16px;
   }
-  .status .count{padding-top:6px;}
   .status .count strong{color:var(--ink);font-weight:600;}
-  .status-right{
-    display:flex;flex-direction:column;align-items:flex-end;gap:5px;
-    flex:0 0 auto;
-  }
-  .limit-select{
-    appearance:none;
-    border:1px solid var(--line);border-radius:8px;
-    padding:7px 30px 7px 12px;font-size:13px;background:var(--paper);
-    color:var(--ink);cursor:pointer;font-family:inherit;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6b6b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-    background-repeat:no-repeat;background-position:right 10px center;
-  }
-  .limit-select:focus{outline:0;border-color:var(--focus);}
-  .status .updated{color:var(--faint);font-size:12px;}
+  .status .updated{color:var(--faint);}
 
   table{width:100%;border-collapse:collapse;font-size:14px;}
   thead th{
@@ -112,9 +74,7 @@
   }
   mark{background:#efefef;color:var(--ink);border-radius:2px;padding:0 1px;}
 
-  .empty,.loading{
-    text-align:center;color:var(--faint);padding:60px 20px;font-size:14px;
-  }
+  .empty,.loading{text-align:center;color:var(--faint);padding:60px 20px;font-size:14px;}
   .empty b{color:var(--muted);}
 
   .banner{
@@ -122,12 +82,24 @@
     background:#fbfbfb;border-radius:6px;padding:12px 14px;margin-bottom:20px;
     font-size:13px;color:var(--muted);
   }
-  .banner code{background:#f0f0f0;padding:1px 5px;border-radius:4px;font-size:12px;}
+
+  /* 업데이트 내역 */
+  .patch{margin-top:18px;}
+  .patch button{
+    background:none;border:0;padding:0;cursor:pointer;
+    color:var(--muted);font-size:13px;font-family:inherit;
+  }
+  .patch button:hover{color:var(--ink);}
+  .patch ul{
+    display:none;list-style:none;margin:10px 0 0;padding:12px 14px;
+    border:1px solid var(--line);border-radius:8px;background:#fbfbfb;
+  }
+  .patch li{display:flex;gap:12px;padding:4px 0;font-size:13px;color:var(--muted);}
+  .pdate{color:var(--faint);white-space:nowrap;font-variant-numeric:tabular-nums;}
 
   footer.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:16px;color:var(--faint);font-size:12px;}
   footer.foot a{color:var(--muted);}
 
-  /* 모바일 : 표 → 카드 */
   @media (max-width:640px){
     .wrap{padding:28px 16px 60px;}
     table,thead,tbody,th,td,tr{display:block;}
@@ -140,16 +112,6 @@
       color:var(--faint);font-size:12px;
     }
     td.namecell[data-label]::before{display:none;}
-
-    .status{
-      align-items:flex-start;
-    }
-    .status-right{
-      align-items:flex-end;
-    }
-    .limit-select{
-      max-width:100%;
-    }
   }
 </style>
 </head>
@@ -160,9 +122,7 @@
     <p>실험실·시약실 물품을 이름·영문명·화학식·CAS번호로 검색합니다.</p>
   </header>
 
-  <div id="demoBanner" class="banner" style="display:none;">
-    현재 <b>화학 시약실</b>외에는 정보가 없습니다. 여유로울 때 구글시트에 비품 정보를 채워주시면 감사하겠습니다.
-  </div>
+  <div id="noticeBanner" class="banner" style="display:none;"></div>
 
   <div class="searchbar">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -182,225 +142,24 @@
 
   <div class="status">
     <span class="count"><strong id="matchN">0</strong>건 / 전체 <span id="totalN">0</span>건</span>
-    <span class="status-right">
-      <select id="limit" class="limit-select" title="표시할 결과 수">
-        <option value="30" selected>상위 30건</option>
-        <option value="50">상위 50건</option>
-        <option value="100">상위 100건</option>
-        <option value="500">상위 500건</option>
-      </select>
-      <span class="updated" id="updated"></span>
-    </span>
+    <span class="updated" id="updated"></span>
   </div>
 
   <div id="out"><div class="loading">데이터를 불러오는 중…</div></div>
+
+  <div class="patch" id="patchBox" style="display:none;">
+    <button id="patchToggle">▸ 업데이트 내역</button>
+    <ul id="patchList" style="display:none;"></ul>
+  </div>
 
   <footer class="foot">
     새 물품/부실 추가·게시는 33_55 조영진으로 챗 바랍니다.
   </footer>
 </div>
 
-<script src="config.js" onerror="void 0"></script>
-<script>
-(function(){
-  "use strict";
-
-  var sources = (typeof SOURCES !== "undefined") ? SOURCES : [
-    { name:"화학시약실",     url:"https://docs.google.com/spreadsheets/d/e/2PACX-1vTwYv6VSQ5BHEs5ABvlFJCGm7W9FiWfohCniPSCu85rbnKg06iT2X3LIa53qMMZk0jYL8aQA7FID8wC/pub?gid=1524000102&single=true&output=csv" }
-  ];
-
-  var els = {
-    q: document.getElementById("q"),
-    clear: document.getElementById("clear"),
-    place: document.getElementById("place"),
-    cat: document.getElementById("cat"),
-    limit: document.getElementById("limit"),
-    out: document.getElementById("out"),
-    matchN: document.getElementById("matchN"),
-    totalN: document.getElementById("totalN"),
-    updated: document.getElementById("updated"),
-    banner: document.getElementById("demoBanner")
-  };
-
-  var rows = [];
-
-  function parseCSV(text){
-    text = text.replace(/^\uFEFF/, "");
-    var out=[], row=[], field="", i=0, inq=false, c;
-    while(i < text.length){
-      c = text[i];
-      if(inq){
-        if(c === '"'){
-          if(text[i+1] === '"'){ field+='"'; i+=2; continue; }
-          inq=false; i++; continue;
-        }
-        field+=c; i++; continue;
-      }
-      if(c === '"'){ inq=true; i++; continue; }
-      if(c === ','){ row.push(field); field=""; i++; continue; }
-      if(c === '\r'){ i++; continue; }
-      if(c === '\n'){ row.push(field); out.push(row); row=[]; field=""; i++; continue; }
-      field+=c; i++;
-    }
-    if(field.length || row.length){ row.push(field); out.push(row); }
-    return out;
-  }
-
-  function toObjects(matrix, placeName){
-    if(!matrix.length) return [];
-    var header = matrix[0].map(function(h){ return String(h||"").trim(); });
-    var idx = {};
-    header.forEach(function(h,k){ if(h) idx[h]=k; });
-
-    function g(r,names){
-      for(var j=0;j<names.length;j++){
-        if(idx[names[j]] !== undefined){
-          var v = r[idx[names[j]]];
-          return v==null ? "" : String(v).trim();
-        }
-      }
-      return "";
-    }
-
-    var list=[];
-    for(var i=1;i<matrix.length;i++){
-      var r = matrix[i];
-      if(!r || r.every(function(x){ return String(x||"").trim()===""; })) continue;
-      var o = {
-        item:    g(r,["품목명","한글명","물품명","기자재명"]),
-        eng:     g(r,["영문명","영명"]),
-        cas:     g(r,["CAS번호","CAS. NO","CAS.NO","CAS"]),
-        formula: g(r,["화학식"]),
-        qty:     g(r,["수량","재고"]),
-        loc:     g(r,["위치","보관위치","비고"]),
-        place:   g(r,["장소","실명"]) || placeName,
-        cat:     g(r,["분류"]),
-        alias:   g(r,["별칭","키워드"]),
-        note:    g(r,["비고","메모"])
-      };
-      if(!o.item && !o.eng && !o.cas) continue;
-      if(!o.cat) o.cat = (o.cas || o.formula) ? "시약" : "비품";
-      o._key = norm([o.item,o.eng,o.cas,o.formula,o.qty,o.loc,o.place,o.cat,o.alias,o.note].join(" "));
-      list.push(o);
-    }
-    return list;
-  }
-
-  function norm(s){ return String(s||"").toLowerCase().replace(/\s+/g,""); }
-
-  function esc(s){
-    return String(s==null?"":s)
-      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-      .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
-  }
-
-  function highlight(text, q){
-    var t = esc(text);
-    if(!q) return t;
-    try{
-      var re = new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","ig");
-      return t.replace(re,"<mark>$1</mark>");
-    }catch(e){ return t; }
-  }
-
-  function load(){
-    var demo = sources.some(function(s){ return !/^https?:\/\//.test(s.url); });
-    els.banner.style.display = demo ? "block" : "none";
-
-    Promise.all(sources.map(function(s){
-      return fetch(s.url, {cache:"no-store"})
-        .then(function(r){ if(!r.ok) throw new Error(r.status); return r.text(); })
-        .then(function(txt){ return toObjects(parseCSV(txt), s.name); })
-        .catch(function(err){
-          console.warn("불러오기 실패:", s.name, err);
-          return [];
-        });
-    })).then(function(chunks){
-      rows = [].concat.apply([], chunks);
-      els.totalN.textContent = rows.length.toLocaleString("ko-KR");
-      fillPlaces();
-      var now = new Date();
-      els.updated.textContent = "불러온 시각 " +
-        now.toLocaleString("ko-KR",{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
-      render();
-    });
-  }
-
-  function fillPlaces(){
-    var seen = {};
-    rows.forEach(function(r){ if(r.place) seen[r.place]=1; });
-    Object.keys(seen).sort(function(a,b){ return a.localeCompare(b,"ko"); })
-      .forEach(function(p){
-        var o=document.createElement("option"); o.value=p; o.textContent=p;
-        els.place.appendChild(o);
-      });
-  }
-
-  function render(){
-    var raw = els.q.value.trim();
-    var q = norm(raw);
-    var place = els.place.value;
-    var cat = els.cat.value;
-    var limit = parseInt(els.limit.value, 10) || 30;
-
-    var list = rows.filter(function(r){
-      if(place && r.place !== place) return false;
-      if(cat && r.cat !== cat) return false;
-      if(q && r._key.indexOf(q) === -1) return false;
-      return true;
-    });
-
-    els.matchN.textContent = list.length.toLocaleString("ko-KR");
-    els.clear.style.display = raw ? "block" : "none";
-
-    if(!list.length){
-      els.out.innerHTML = '<div class="empty"><b>검색 결과가 없습니다.</b><br>이름·영문명·화학식·CAS번호로도 검색해 보세요.</div>';
-      return;
-    }
-
-    var html = '<table><thead><tr>'+
-      '<th>품목</th><th>수량</th><th>위치</th><th>장소</th><th>분류</th>'+
-      '</tr></thead><tbody>';
-
-    list.slice(0,limit).forEach(function(r){
-      var second = [r.formula, r.cas].filter(Boolean).join(" · ");
-      html += '<tr>'+
-        '<td class="namecell" data-label="품목">'+
-          '<div class="name">'+highlight(r.item,raw)+'</div>'+
-          (r.eng ? '<div class="eng">'+highlight(r.eng,raw)+'</div>' : '')+
-          (second ? '<div class="eng">'+highlight(second,raw)+'</div>' : '')+
-          (r.alias ? '<div class="eng">'+esc(r.alias)+'</div>' : '')+
-        '</td>'+
-        '<td class="qty" data-label="수량">'+esc(r.qty||"-")+'</td>'+
-        '<td class="sub" data-label="위치">'+esc(r.loc||"-")+'</td>'+
-        '<td class="sub" data-label="장소">'+esc(r.place||"-")+'</td>'+
-        '<td data-label="분류"><span class="tag">'+esc(r.cat||"-")+'</span></td>'+
-      '</tr>';
-    });
-
-    html += '</tbody></table>';
-    if(list.length > limit){
-      html += '<div class="empty" style="padding:20px;">상위 ' +
-        limit.toLocaleString("ko-KR") +
-        '건만 표시합니다. 검색어를 좁혀 주세요.</div>';
-    }
-    els.out.innerHTML = html;
-  }
-
-  var timer;
-  els.q.addEventListener("input", function(){
-    clearTimeout(timer); timer=setTimeout(render,120);
-  });
-  els.place.addEventListener("change", render);
-  els.cat.addEventListener("change", render);
-  els.limit.addEventListener("change", render);
-  els.clear.addEventListener("click", function(){
-    els.q.value=""; els.q.focus(); render();
-  });
-
-  load();
-})();
-</script>
-<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="settings.js"></script>
+<script src="search.js"></script>
 </body>
 </html>
