@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>통합검색기 관리</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --muted:#4a4a4a; --faint:#8a8a8a;
+    --line:#e5e5e5; --line-strong:#c9c9c9;
+    --paper:#fff; --hover:#fafafa; --tag:#f2f2f2; --focus:#9a9a9a;
+    --warn:#8a5a00;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:40px 24px 100px;}
+  h1{font-size:21px;font-weight:600;margin:0 0 4px;}
+  .lead{color:var(--faint);font-size:13px;margin:0 0 26px;}
+
+  section{margin-bottom:34px;}
+  h2{
+    font-size:15px;font-weight:600;margin:0 0 12px;
+    padding-bottom:8px;border-bottom:1px solid var(--line-strong);
+  }
+  .hint{font-size:12.5px;color:var(--faint);margin:0 0 12px;line-height:1.6;}
+
+  input[type=text],input[type=password],input[type=date],textarea{
+    border:1px solid var(--line-strong);border-radius:7px;padding:8px 10px;
+    font-size:13.5px;font-family:inherit;color:var(--ink);background:var(--paper);
+  }
+  input:focus,textarea:focus{outline:0;border-color:var(--focus);}
+  textarea{width:100%;min-height:60px;resize:vertical;}
+
+  button{
+    border:1px solid var(--line-strong);background:var(--paper);
+    border-radius:7px;padding:8px 14px;font-size:13.5px;font-family:inherit;
+    color:var(--ink);cursor:pointer;
+  }
+  button:hover{background:var(--hover);}
+  button:disabled{color:var(--faint);cursor:not-allowed;}
+  button.primary{border-color:var(--ink);}
+  button.mini{padding:4px 9px;font-size:12px;}
+
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .status{font-size:12.5px;color:var(--muted);margin-top:10px;min-height:18px;}
+  .status.err{color:#a33;}
+
+  /* 장소 트리 */
+  .group{border:1px solid var(--line);border-radius:8px;margin-bottom:12px;}
+  .ghead{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 14px;background:#fbfbfb;border-bottom:1px solid var(--line);
+    font-weight:600;font-size:14px;border-radius:8px 8px 0 0;
+  }
+  .ghead .gcount{margin-left:auto;font-weight:400;font-size:12px;color:var(--faint);}
+  .prow{
+    display:grid;grid-template-columns:1fr 210px 150px 70px;gap:10px;align-items:center;
+    padding:9px 14px;border-bottom:1px solid var(--line);font-size:13.5px;
+  }
+  .prow:last-child{border-bottom:0;}
+  .prow .cats{display:flex;gap:12px;font-size:12.5px;color:var(--muted);}
+  .prow .num{text-align:right;color:var(--faint);font-size:12.5px;font-variant-numeric:tabular-nums;}
+  .prow.off{color:var(--faint);}
+  label.cb{display:inline-flex;align-items:center;gap:5px;cursor:pointer;}
+
+  /* 패치노트 */
+  .note{display:grid;grid-template-columns:150px 1fr 40px;gap:8px;margin-bottom:8px;}
+  .note input[type=text]{width:100%;}
+
+  .preview{
+    border:1px solid var(--line);border-radius:8px;padding:12px 14px;
+    background:#fbfbfb;font-size:13px;color:var(--muted);
+  }
+  .preview strong{color:var(--ink);}
+
+  .savebar{
+    position:sticky;bottom:0;background:var(--paper);
+    border-top:1px solid var(--line-strong);padding:14px 0;margin-top:30px;
+  }
+  @media (max-width:700px){
+    .prow{grid-template-columns:1fr;gap:6px;}
+    .prow .num{text-align:left;}
+    .note{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>통합검색기 관리</h1>
+  <p class="lead">여기서 저장하면 <code>settings.json</code> 이 커밋되고, 잠시 뒤 검색기에 반영됩니다.</p>
+
+  <section>
+    <h2>1. 접속</h2>
+    <p class="hint">
+      GitHub Fine-grained 토큰(해당 저장소 Contents 쓰기 권한)이 필요합니다.
+      토큰은 이 브라우저에만 저장되며 저장소에 올라가지 않습니다.
+      공용 PC에서는 <b>기억하기</b>를 끄고 사용하세요.
+    </p>
+    <div class="row">
+      <input id="token" type="password" placeholder="github_pat_..." style="flex:1;min-width:260px;" />
+      <label class="cb"><input id="remember" type="checkbox" checked /> 기억하기</label>
+      <button id="loadBtn" class="primary">설정 불러오기</button>
+    </div>
+    <div class="status" id="loadStatus"></div>
+  </section>
+
+  <section id="main" style="display:none;">
+    <h2>2. 장소 표시 설정</h2>
+    <p class="hint">
+      장소 체크를 끄면 해당 시트를 아예 불러오지 않습니다.
+      분류 체크는 그 장소에서 노출할 항목 종류입니다.
+      날짜는 검색기 상단의 "최근 갱신" 표시에 쓰입니다.
+    </p>
+    <div class="row" style="margin-bottom:12px;">
+      <button id="countBtn" class="mini">현재 물품 수 불러오기</button>
+      <span class="status" id="countStatus" style="margin:0;"></span>
+    </div>
+    <div id="tree"></div>
+  </section>
+
+  <section id="sec3" style="display:none;">
+    <h2>3. 공지 배너</h2>
+    <div class="row" style="margin-bottom:8px;">
+      <label class="cb"><input id="bannerShow" type="checkbox" /> 검색기 상단에 배너 표시</label>
+    </div>
+    <textarea id="bannerText" placeholder="예: 지구과학 실험실은 목록 정리 중입니다."></textarea>
+  </section>
+
+  <section id="sec4" style="display:none;">
+    <h2>4. 업데이트 내역(패치노트)</h2>
+    <p class="hint">최신 날짜가 위로 정렬되어 검색기 하단에 표시됩니다.</p>
+    <div id="notes"></div>
+    <button id="addNote" class="mini">항목 추가</button>
+  </section>
+
+  <section id="sec5" style="display:none;">
+    <h2>5. 저장 전 확인</h2>
+    <div class="preview" id="preview">물품 수를 불러오면 노출 건수를 계산합니다.</div>
+  </section>
+
+  <div class="savebar" id="savebar" style="display:none;">
+    <div class="row">
+      <button id="saveBtn" class="primary">settings.json 저장(커밋)</button>
+      <span class="status" id="saveStatus" style="margin:0;"></span>
+    </div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script src="settings.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
