@@ -10,6 +10,11 @@
     clear: document.getElementById("clear"),
     place: document.getElementById("place"),
     cat: document.getElementById("cat"),
+    pageSize: document.getElementById("pageSize"),
+    pager: document.getElementById("pager"),
+    pagePrev: document.getElementById("pagePrev"),
+    pageNext: document.getElementById("pageNext"),
+    pageInfo: document.getElementById("pageInfo"),
     out: document.getElementById("out"),
     matchN: document.getElementById("matchN"),
     totalN: document.getElementById("totalN"),
@@ -22,6 +27,7 @@
   };
 
   var rows = [];
+  var page = 1;
 
   function esc(s) {
     return String(s == null ? "" : s)
@@ -140,14 +146,24 @@
     if (!list.length) {
       els.out.innerHTML = '<div class="empty">검색 결과가 없습니다.' +
         (raw ? ' <b>' + esc(raw) + '</b>' : '') + '</div>';
+      els.pager.style.display = "none";
       return;
     }
+
+    /* 페이지 범위 보정 — 필터가 바뀌어 총 페이지가 줄어든 경우 대비 */
+    var size = parseInt(els.pageSize.value, 10) || 50;
+    var pages = Math.ceil(list.length / size);
+    if (page > pages) page = pages;
+    if (page < 1) page = 1;
+
+    var start = (page - 1) * size;
+    var shown = list.slice(start, start + size);
 
     var html = '<table><thead><tr>' +
       '<th>품목</th><th>CAS·화학식</th><th>수량</th><th>위치</th><th>장소</th><th>분류</th><th>비고</th>' +
       '</tr></thead><tbody>';
 
-    list.forEach(function (r) {
+    shown.forEach(function (r) {
       html += '<tr>' +
         '<td class="namecell" data-label="품목"><div class="name">' + highlight(r.item, raw) + '</div>' +
           (r.eng ? '<div class="eng">' + highlight(r.eng, raw) + '</div>' : '') + '</td>' +
@@ -163,13 +179,32 @@
 
     html += '</tbody></table>';
     els.out.innerHTML = html;
+
+    els.pager.style.display = pages > 1 ? "flex" : "none";
+    els.pageInfo.textContent = page + " / " + pages + " 쪽  ·  " +
+      (start + 1) + "–" + (start + shown.length) + "번째";
+    els.pagePrev.disabled = page <= 1;
+    els.pageNext.disabled = page >= pages;
   }
 
-  els.q.addEventListener("input", render);
-  els.place.addEventListener("change", render);
-  els.cat.addEventListener("change", render);
+  /* 필터·검색어가 바뀌면 항상 첫 쪽부터 다시 봅니다. */
+  function resetAndRender() {
+    page = 1;
+    render();
+  }
+
+  els.q.addEventListener("input", resetAndRender);
+  els.place.addEventListener("change", resetAndRender);
+  els.cat.addEventListener("change", resetAndRender);
+  els.pageSize.addEventListener("change", resetAndRender);
+  els.pagePrev.addEventListener("click", function () {
+    if (page > 1) { page--; render(); window.scrollTo(0, 0); }
+  });
+  els.pageNext.addEventListener("click", function () {
+    page++; render(); window.scrollTo(0, 0);
+  });
   els.clear.addEventListener("click", function () {
-    els.q.value = ""; els.q.focus(); render();
+    els.q.value = ""; els.q.focus(); resetAndRender();
   });
 
   load();
