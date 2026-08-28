@@ -104,6 +104,20 @@
     font-size:13px;color:var(--muted);
   }
 
+  /* 페이지 넘김 */
+  .pager{
+    display:flex;justify-content:center;align-items:center;gap:14px;
+    margin-top:18px;font-size:13px;color:var(--muted);
+  }
+  .pager button{
+    border:1px solid var(--line);border-radius:8px;background:var(--paper);
+    padding:7px 12px;font-size:13px;font-family:inherit;color:var(--ink);
+    cursor:pointer;
+  }
+  .pager button:hover:not(:disabled){border-color:var(--focus);}
+  .pager button:disabled{color:var(--faint);cursor:default;}
+  .pager span{font-variant-numeric:tabular-nums;}
+
   /* 업데이트 내역 */
   .patch{margin-top:18px;}
   .patch button{
@@ -159,6 +173,12 @@
       <option value="비품">비품</option>
       <option value="소모품">소모품</option>
     </select>
+    <select id="pageSize">
+      <option value="30">30개씩 보기</option>
+      <option value="50" selected>50개씩 보기</option>
+      <option value="100">100개씩 보기</option>
+      <option value="500">500개씩 보기</option>
+    </select>
   </div>
 
   <div class="status">
@@ -169,6 +189,12 @@
   <div class="updpanel" id="updPanel" style="display:none;"></div>
 
   <div id="out"><div class="loading">데이터를 불러오는 중…</div></div>
+
+  <div class="pager" id="pager" style="display:none;">
+    <button id="pagePrev">← 이전</button>
+    <span id="pageInfo"></span>
+    <button id="pageNext">다음 →</button>
+  </div>
 
   <div class="patch" id="patchBox" style="display:none;">
     <button id="patchToggle">▸ 업데이트 내역</button>
