@@ -47,6 +47,7 @@ const SOURCES = [
 
   // ── 지구과학 ──
   { name: "지구과학실험실1",         group: "earth",   url: csv("482016705") },
+  { name: "지구과학실험실1,2사이",    group: "earth",   url: csv("1883538397") },
   { name: "지구과학실험실2",         group: "earth",   url: csv("1159490737") },
   { name: "지구과학R&E실",           group: "earth",   url: csv("1383335509") },
   { name: "지구과학첨단기기실",       group: "earth",   url: csv("1694395998") },
