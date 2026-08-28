@@ -60,8 +60,8 @@ const CATEGORIES = ["시약", "비품", "소모품"];
    관리 페이지 설정 — settings.json 을 커밋할 GitHub 저장소
    ============================================================ */
 const ADMIN_REPO = {
-  owner:  "GITHUB_사용자명",   // 예: youngkildong
-  repo:   "리포지토리이름",     // 예: lab-search
-  branch: "main",               // GitHub 기본 브랜치 (또는 "master")
+  owner:  "NAMU578",   
+  repo:   "FINDER",     
+  branch: "main",               
   path:   "settings.json"
 };
