@@ -51,12 +51,11 @@
 
   /* 표시 중인 장소의 관리자 지정 갱신일 목록. 그룹 순서대로. */
   function applyUpdated() {
-    var latest = SETTINGS.latestUpdated();
     var visible = SOURCES.filter(function (s) { return SETTINGS.place(s.name).visible; });
     if (!visible.length) { els.updated.style.display = "none"; return; }
 
     els.updated.style.display = "block";
-    els.updated.textContent = "▸ 최근 갱신 " + (latest || "미지정");
+    els.updated.textContent = "▸ 갱신 일자 확인하기";
 
     var html = "";
     GROUPS.forEach(function (g) {
@@ -74,7 +73,7 @@
     els.updated.addEventListener("click", function () {
       var open = els.updPanel.style.display !== "none";
       els.updPanel.style.display = open ? "none" : "block";
-      els.updated.textContent = (open ? "▸ " : "▾ ") + "최근 갱신 " + (latest || "미지정");
+      els.updated.textContent = (open ? "▸ " : "▾ ") + "갱신 일자 확인하기";
     });
   }
 
