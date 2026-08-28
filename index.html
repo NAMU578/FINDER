@@ -54,7 +54,28 @@
     margin:22px 0 12px;color:var(--muted);font-size:13px;
   }
   .status .count strong{color:var(--ink);font-weight:600;}
-  .status .updated{color:var(--faint);}
+  .updbtn{
+    background:none;border:0;padding:0;cursor:pointer;
+    color:var(--faint);font-size:13px;font-family:inherit;
+  }
+  .updbtn:hover{color:var(--ink);}
+
+  .updpanel{
+    border:1px solid var(--line);border-radius:8px;background:#fbfbfb;
+    padding:12px 14px;margin:-4px 0 14px;font-size:13px;
+  }
+  .updpanel .ug{
+    color:var(--faint);font-size:11.5px;letter-spacing:.03em;
+    margin:10px 0 4px;
+  }
+  .updpanel .ug:first-child{margin-top:0;}
+  .updpanel .ur{
+    display:flex;justify-content:space-between;gap:14px;
+    padding:3px 0;color:var(--muted);
+  }
+  .updpanel .ur span:last-child{
+    color:var(--faint);white-space:nowrap;font-variant-numeric:tabular-nums;
+  }
 
   table{width:100%;border-collapse:collapse;font-size:14px;}
   thead th{
@@ -142,8 +163,10 @@
 
   <div class="status">
     <span class="count"><strong id="matchN">0</strong>건 / 전체 <span id="totalN">0</span>건</span>
-    <span class="updated" id="updated"></span>
+    <button class="updbtn" id="updated" style="display:none;"></button>
   </div>
+
+  <div class="updpanel" id="updPanel" style="display:none;"></div>
 
   <div id="out"><div class="loading">데이터를 불러오는 중…</div></div>
 
