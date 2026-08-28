@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "savedAt": "",
+  "savedAt": "2026-08-28 02:44",
   "banner": {
     "show": false,
     "text": ""
@@ -169,7 +169,7 @@
       "updated": ""
     },
     "생명시약실": {
-      "visible": true,
+      "visible": false,
       "cats": [
         "시약",
         "비품",
