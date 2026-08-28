@@ -14,6 +14,7 @@
     matchN: document.getElementById("matchN"),
     totalN: document.getElementById("totalN"),
     updated: document.getElementById("updated"),
+    updPanel: document.getElementById("updPanel"),
     banner: document.getElementById("noticeBanner"),
     patchBox: document.getElementById("patchBox"),
     patchToggle: document.getElementById("patchToggle"),
@@ -48,9 +49,33 @@
     }
   }
 
+  /* 표시 중인 장소의 관리자 지정 갱신일 목록. 그룹 순서대로. */
   function applyUpdated() {
-    var d = SETTINGS.latestUpdated();
-    els.updated.textContent = d ? "최근 갱신 " + d : "";
+    var latest = SETTINGS.latestUpdated();
+    var visible = SOURCES.filter(function (s) { return SETTINGS.place(s.name).visible; });
+    if (!visible.length) { els.updated.style.display = "none"; return; }
+
+    els.updated.style.display = "block";
+    els.updated.textContent = "▸ 최근 갱신 " + (latest || "미지정");
+
+    var html = "";
+    GROUPS.forEach(function (g) {
+      var members = visible.filter(function (s) { return s.group === g.id; });
+      if (!members.length) return;
+      html += '<div class="ug">' + esc(g.name) + '</div>';
+      members.forEach(function (s) {
+        var d = SETTINGS.place(s.name).updated;
+        html += '<div class="ur"><span>' + esc(s.name) + '</span>' +
+                '<span>' + (d ? esc(d) : "미지정") + '</span></div>';
+      });
+    });
+    els.updPanel.innerHTML = html;
+
+    els.updated.addEventListener("click", function () {
+      var open = els.updPanel.style.display !== "none";
+      els.updPanel.style.display = open ? "none" : "block";
+      els.updated.textContent = (open ? "▸ " : "▾ ") + "최근 갱신 " + (latest || "미지정");
+    });
   }
 
   function renderPatchNotes() {
