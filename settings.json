@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "savedAt": "2026-08-27 23:13",
+  "savedAt": "",
   "banner": {
-    "show": true,
-    "text": "생명 시약실은 현재 표시되지 않습니다."
+    "show": false,
+    "text": ""
   },
   "places": {
     "물리학실험실1": {
@@ -112,7 +112,7 @@
         "비품",
         "소모품"
       ],
-      "updated": "2026-03-02"
+      "updated": ""
     },
     "생명과학실험실": {
       "visible": true,
@@ -169,13 +169,13 @@
       "updated": ""
     },
     "생명시약실": {
-      "visible": false,
+      "visible": true,
       "cats": [
         "시약",
         "비품",
         "소모품"
       ],
-      "updated": "2026-08-25"
+      "updated": ""
     },
     "지구과학실험실1": {
       "visible": true,
