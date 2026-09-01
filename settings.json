@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "savedAt": "2026-08-28 06:21",
+  "savedAt": "2026-09-01 04:56",
   "banner": {
     "show": true,
     "text": "현재 생명과학 시약실은 표시되지 않습니다."
@@ -169,7 +169,7 @@
       "updated": ""
     },
     "생명시약실": {
-      "visible": false,
+      "visible": true,
       "cats": [
         "시약",
         "비품",
